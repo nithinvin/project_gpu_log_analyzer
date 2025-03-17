@@ -12,7 +12,7 @@ memory_counts = {
     "16+ GB": 0
 }
 
-def process_row(row):
+def process_memory_field(row):
     if row == header:
         return   # Skip repeated headers
 
@@ -48,6 +48,14 @@ def process_row(row):
         # print(f"Skipping invalid row: {row}")  # Handle non-numeric values
         pass
 
+def print_memory_stats():
+    # Print results
+    print(f"Total Rows: {total_rows}")
+    print(f"Maximum System Memory Used: {max_memory:.2f} GB")
+    for key, value in memory_counts.items():
+        print(f"{key}: {value} times")
+
+
 def process():
     file_path = "file.csv"  # Replace with your actual file path
     with open(file_path, newline='', encoding="ISO-8859-1") as csvfile:
@@ -59,12 +67,7 @@ def process():
                 header = row
                 first_row = False
                 continue  # Skip the first header row
-            process_row(row)
-    # Print results
-    print(f"Total Rows: {total_rows}")
-    print(f"Maximum System Memory Used: {max_memory:.2f} GB")
-    for key, value in memory_counts.items():
-        print(f"{key}: {value} times")
-
+            process_memory_field(row)
+    print_memory_stats()
 
 process()
