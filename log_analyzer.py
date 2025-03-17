@@ -1,6 +1,7 @@
 import sys
 import csv
 from memory_processor import process_memory_field, print_memory_stats
+from temperature_processor import process_cpu_temperature_field, process_gpu_temperature_field, print_temperature_stats
 
 def process(file_path):
     with open(file_path, newline='', encoding="ISO-8859-1") as csvfile:
@@ -16,18 +17,17 @@ def process(file_path):
                 continue
             row = [col.strip() for col in row if col.strip()]  # Remove empty fields due to trailing commas
             process_memory_field(row)
-            # process_cpu_temperature_field(row)
-            # process_gpu_temperature_field(row)
+            process_cpu_temperature_field(row)
+            process_gpu_temperature_field(row)
             # process_board_power_field(row)
     print_memory_stats()
-    # print_cpu_temperature_stats()
-    # print_gpu_temperature_stats()
+    print_temperature_stats()
     # print_board_power_stats()
 
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        file_path="./test_small_file.csv"
+        file_path="./small_gpu_log.csv"
     else:
         file_path = sys.argv[1]
     process(file_path)

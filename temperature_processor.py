@@ -1,63 +1,67 @@
 import csv
 
-file_path = "file.csv"  # Replace with your actual file path
 
-max_temperature = float('-inf')
-first_row = True
-header = None
 total_rows = 0  # Count total data rows
-temperature_counts = {
+cpu_temperature_counts = {
     "50-59 deg c": 0,
     "60-69 deg c": 0,
     "70-79 deg c": 0,
     "80-89 deg c": 0,
     "90-99 deg c": 0,
-    "100+ deg c": 0
+    "100+ deg c": 0,
+    "max_temp": float('-inf')
+}
+gpu_temperature_counts = {
+    "50-59 deg c": 0,
+    "60-69 deg c": 0,
+    "70-79 deg c": 0,
+    "80-89 deg c": 0,
+    "90-99 deg c": 0,
+    "100+ deg c": 0,
+    "max_temp": float('-inf')
 }
 
-with open(file_path, newline='', encoding="ISO-8859-1") as csvfile:
-    reader = csv.reader(csvfile)
+def process_temperature_field(row, field, counts_dict):
+    try:
+        global total_rows
+        temperature = float(row[field])  # Can use row[3] for GPU temperature
+        total_rows += 1  # Count valid data rows
 
-    for row in reader:
-        if first_row:
-            header = row
-            first_row = False
-            continue  # Skip the first header row
+        # Update memory usage counts
+        if 50 <= temperature < 59.9:
+            counts_dict["50-59 deg c"] += 1
+        elif 60 <= temperature < 69.9:
+            counts_dict["60-69 deg c"] += 1
+        elif 70 <= temperature < 79.9:
+            counts_dict["70-79 deg c"] += 1
+        elif 80 <= temperature < 89.9:
+            counts_dict["80-89 deg c"] += 1
+        elif 90 <= temperature < 99.9:
+            counts_dict["90-99 deg c"] += 1
+        elif temperature >= 100:
+            counts_dict["100+ deg c"] += 1
 
-        if row == header:  
-            continue  # Skip repeated headers
+        counts_dict['max_temp'] = max(counts_dict['max_temp'], temperature)
 
-        row = [col.strip() for col in row if col.strip()]  # Remove empty fields due to trailing commas
+    except ValueError:
+        #print(f"Skipping invalid row: {row}")  # Handle non-numeric values
+        pass
 
-        if not row:
-            continue  # Skip empty rows
+def process_cpu_temperature_field(row):
+    process_temperature_field(row, -2, cpu_temperature_counts)
 
-        try:
-            temperature = float(row[-2])  # Can use row[3] for GPU temperature
-            total_rows += 1  # Count valid data rows
+def process_gpu_temperature_field(row):
+    process_temperature_field(row, 3, gpu_temperature_counts)
 
-            # Update memory usage counts
-            if 50 <= temperature < 59.9:
-                temperature_counts["50-59 deg c"] += 1
-            elif 60 <= temperature < 69.9:
-                temperature_counts["60-69 deg c"] += 1
-            elif 70 <= temperature < 79.9:
-                temperature_counts["70-79 deg c"] += 1
-            elif 80 <= temperature < 89.9:
-                temperature_counts["80-89 deg c"] += 1
-            elif 90 <= temperature < 99.9:
-                temperature_counts["90-99 deg c"] += 1
-            elif temperature >= 100:
-                temperature_counts["100+ deg c"] += 1
-
-            max_temperature = max(max_temperature, temperature)
-
-        except ValueError:
-            print(f"Skipping invalid row: {row}")  # Handle non-numeric values
-
-# Print results
-print(f"Total Rows: {total_rows}")
-print(f"Maximum CPU Temperature: {max_temperature:.2f} degree Celcius")
-for key, value in temperature_counts.items():
-    print(f"{key}: {value} times")
+def print_temperature_stats():
+    # Print results
+    print(f"Total Rows: {total_rows}")
+    max_cpu_temp = cpu_temperature_counts['max_temp']
+    print(f"Maximum CPU Temperature: {max_cpu_temp:.2f} degree Celcius")
+    for key, value in cpu_temperature_counts.items():
+        print(f"{key}: {value} times")
+    max_gpu_temp = gpu_temperature_counts['max_temp']
+    print(f"Maximum GPU Temperature: {max_gpu_temp:.2f} degree Celcius")
+    for key, value in gpu_temperature_counts.items():
+        print(f"{key}: {value} times")
 
