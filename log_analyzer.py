@@ -12,6 +12,9 @@ def process(file_path):
                 header = row
                 first_row = False
                 continue  # Skip the first header row
+            if row == header:
+                continue
+            row = [col.strip() for col in row if col.strip()]  # Remove empty fields due to trailing commas
             process_memory_field(row)
             # process_cpu_temperature_field(row)
             # process_gpu_temperature_field(row)

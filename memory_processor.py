@@ -13,14 +13,6 @@ memory_counts = {
 }
 
 def process_memory_field(row):
-    if row == header:
-        return   # Skip repeated headers
-
-    row = [col.strip() for col in row if col.strip()]  # Remove empty fields due to trailing commas
-
-    if not row:
-        return  # Skip empty rows
-
     try:
         global total_rows
         global max_memory
