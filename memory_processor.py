@@ -54,20 +54,3 @@ def print_memory_stats():
     print(f"Maximum System Memory Used: {max_memory:.2f} GB")
     for key, value in memory_counts.items():
         print(f"{key}: {value} times")
-
-
-def process():
-    file_path = "file.csv"  # Replace with your actual file path
-    with open(file_path, newline='', encoding="ISO-8859-1") as csvfile:
-        reader = csv.reader(csvfile)
-
-        first_row = True
-        for row in reader:
-            if first_row:
-                header = row
-                first_row = False
-                continue  # Skip the first header row
-            process_memory_field(row)
-    print_memory_stats()
-
-process()
