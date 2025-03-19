@@ -55,13 +55,13 @@ def process_gpu_temperature_field(row):
 
 def print_temperature_stats():
     # Print results
-    print(f"Total Rows: {total_rows}")
     max_cpu_temp = cpu_temperature_counts['max_temp']
     print(f"Maximum CPU Temperature: {max_cpu_temp:.2f} degree Celcius")
+    print(f"Total Rows: {total_rows/2}")
     for key, value in cpu_temperature_counts.items():
-        print(f"{key}: {value} times")
+        print(f"\t{key}: {value} times")
     max_gpu_temp = gpu_temperature_counts['max_temp']
     print(f"Maximum GPU Temperature: {max_gpu_temp:.2f} degree Celcius")
     for key, value in gpu_temperature_counts.items():
-        print(f"{key}: {value} times")
+        print(f"\t{key}: {value} times")
 

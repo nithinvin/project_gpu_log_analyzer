@@ -1,6 +1,5 @@
 import csv
 
-
 max_memory = float('-inf')
 header = None
 total_rows = 0  # Count total data rows
@@ -34,7 +33,6 @@ def process_memory_field(row):
             memory_counts["16+ GB"] += 1
 
         max_memory = max(max_memory, memory_gb)
-        return total_rows
 
     except ValueError:
         # print(f"Skipping invalid row: {row}")  # Handle non-numeric values
@@ -42,7 +40,7 @@ def process_memory_field(row):
 
 def print_memory_stats():
     # Print results
-    print(f"Total Rows: {total_rows}")
     print(f"Maximum System Memory Used: {max_memory:.2f} GB")
+    print(f"Total Rows: {total_rows}")
     for key, value in memory_counts.items():
-        print(f"{key}: {value} times")
+        print(f"\t{key}: {value} times")

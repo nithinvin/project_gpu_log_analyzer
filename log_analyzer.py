@@ -2,6 +2,7 @@ import sys
 import csv
 from memory_processor import process_memory_field, print_memory_stats
 from temperature_processor import process_cpu_temperature_field, process_gpu_temperature_field, print_temperature_stats
+from board_power_processor import process_board_power_field, print_board_power_stats
 
 def process(file_path):
     with open(file_path, newline='', encoding="ISO-8859-1") as csvfile:
@@ -19,10 +20,10 @@ def process(file_path):
             process_memory_field(row)
             process_cpu_temperature_field(row)
             process_gpu_temperature_field(row)
-            # process_board_power_field(row)
+            process_board_power_field(row)
     print_memory_stats()
     print_temperature_stats()
-    # print_board_power_stats()
+    print_board_power_stats()
 
 
 if __name__ == '__main__':
